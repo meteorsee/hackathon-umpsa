@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="recipient_categories">
+        <item>Food Bank</item>
+        <item>Orphanage</item>
+        <item>Old Folks Home</item>
+        <item>NGO</item>
+        <item>Other</item>
+    </string-array>
+
+
+</resources>

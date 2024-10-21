@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "678475671709",
+    "firebase_url": "https://hackathon-umpsa-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "hackathon-umpsa",
+    "storage_bucket": "hackathon-umpsa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678475671709:android:9b0db8546f18c572b10c74",
+        "android_client_info": {
+          "package_name": "com.example.hackathon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678475671709-39o9585j9o7v63vqhdm7nqqh0q3v9qf4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hackathon",
+            "certificate_hash": "896495b0c34bd9337cfe55ffa3cc5bd69c7fa579"
+          }
+        },
+        {
+          "client_id": "678475671709-7hj79losji0gorqtka6s6r1th3m1ucng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwCqdoRPw2wnonhs-woJhbhd95i30000A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678475671709-7hj79losji0gorqtka6s6r1th3m1ucng.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -70,7 +70,7 @@ public class DonorProfileActivity extends AppCompatActivity {
         }
 
         // Create a User object with UID and save to Firebase Database
-        User user = new User(firstName, lastName, email, address, phoneNumber, "Donor"); // Role: "Donor"
+        User user = new User(firstName, lastName, email, address, phoneNumber, "Donor", 0); // Role: "Donor"
         databaseReference.child(uid).setValue(user)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

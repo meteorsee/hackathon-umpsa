@@ -9,13 +9,17 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hackathon.models.Donation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class DonationActivity extends AppCompatActivity {
 
@@ -27,6 +31,7 @@ public class DonationActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference donationsRef;
+    private DatabaseReference usersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +44,15 @@ public class DonationActivity extends AppCompatActivity {
 
         if (currentUser == null) {
             // Redirect to login if the user is not authenticated
-            // startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
         }
 
-        // Initialize Firebase Realtime Database reference
+        String userId = currentUser.getUid(); // Get user ID of the logged-in donor
+
+        // Initialize Firebase Realtime Database references
         donationsRef = FirebaseDatabase.getInstance().getReference("donations");
+        usersRef = FirebaseDatabase.getInstance().getReference("users");
 
         // Initialize Views
         foodBankSpinner = findViewById(R.id.foodBankSpinner);
@@ -72,7 +79,7 @@ public class DonationActivity extends AppCompatActivity {
         submitDonationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitDonation(currentUser.getUid());
+                submitDonation(userId); // Use userId instead of donorId
             }
         });
     }
@@ -111,6 +118,9 @@ public class DonationActivity extends AppCompatActivity {
         // Store the donation in Firebase Realtime Database
         donationsRef.push().setValue(donation).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                // After successful donation, update points
+                addDonationAndPoints(userId, 100); // Assuming 100 points per donation
+
                 Toast.makeText(DonationActivity.this, "Donation recorded successfully.", Toast.LENGTH_SHORT).show();
 
                 // Optionally, clear the form fields after submission
@@ -123,4 +133,31 @@ public class DonationActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void addDonationAndPoints(String userId, int pointsToAdd) {
+        // Step 1: Update donor's points in Firebase
+        DatabaseReference userRef = usersRef.child(userId);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Get the current points
+                    Integer currentPoints = snapshot.child("points").getValue(Integer.class);
+
+                    // Add points for the donation
+                    int updatedPoints = (currentPoints != null ? currentPoints : 0) + pointsToAdd;
+
+                    // Update points in the database
+                    userRef.child("points").setValue(updatedPoints);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle database errors here
+            }
+        });
+    }
 }
+

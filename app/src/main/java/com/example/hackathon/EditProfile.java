@@ -21,7 +21,7 @@ public class EditProfile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_edit_profile);
 
         // Initialize views
         welcomeTextView = findViewById(R.id.welcomeTextView); // Assuming you have a TextView with this ID

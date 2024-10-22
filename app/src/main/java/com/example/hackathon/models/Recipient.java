@@ -8,7 +8,7 @@ public class Recipient extends User {
     }
 
     public Recipient(String firstName, String lastName, String email, String address, String phoneNumber, String role, String category, String bankName, String bankAccount) {
-        super(firstName, lastName, email, address, phoneNumber, role);
+        super(firstName, lastName, email, address, phoneNumber, role, 0);
         this.category = category;
         this.bankName = bankName;
         this.bankAccount = bankAccount;

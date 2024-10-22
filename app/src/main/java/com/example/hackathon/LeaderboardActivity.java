@@ -53,10 +53,13 @@ public class LeaderboardActivity extends AppCompatActivity {
                 leaderboardList.clear(); // Clear the list before adding new data
 
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    String name = userSnapshot.child("name").getValue(String.class);
+                    String firstName = userSnapshot.child("firstName").getValue(String.class);
+                    String lastName = userSnapshot.child("lastName").getValue(String.class);
                     Long points = userSnapshot.child("points").getValue(Long.class);
 
-                    if (name != null && points != null) {
+                    // Check if fields are not null
+                    if (firstName != null && lastName != null && points != null) {
+                        String name = firstName + " " + lastName; // Combine first and last name
                         LeaderboardEntry entry = new LeaderboardEntry(name, points);
                         leaderboardList.add(entry);
                     }
@@ -80,4 +83,5 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
     }
+
 }

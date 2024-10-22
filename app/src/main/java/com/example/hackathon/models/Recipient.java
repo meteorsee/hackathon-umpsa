@@ -1,4 +1,4 @@
-package com.example.hackathon;
+package com.example.hackathon.models;
 
 // Recipient.java (extends User for Recipient-specific data)
 public class Recipient extends User {

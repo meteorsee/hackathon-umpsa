@@ -1,4 +1,4 @@
-package com.example.hackathon;
+package com.example.hackathon.models;
 
 public class Donation {
     private String userId;

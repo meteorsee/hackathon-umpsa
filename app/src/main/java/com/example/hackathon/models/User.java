@@ -1,4 +1,4 @@
-package com.example.hackathon;
+package com.example.hackathon.models;
 
 // User.java (for Donor)
 public class User {

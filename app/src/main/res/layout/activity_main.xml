@@ -1,29 +1,98 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    tools:context=".MainActivity">
+
+    <!-- App Bar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:title="Food Donation App"
+        app:titleTextColor="@android:color/white" />
+
+    <!-- User Greeting -->
     <TextView
-        android:id="@+id/welcomeTextView"
+        android:id="@+id/userGreeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Hello, [User]!"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp"/>
 
+    <!-- Make a Donation Button -->
     <Button
-        android:id="@+id/editProfileButton"
-        android:layout_width="match_parent"
+        android:id="@+id/makeDonationButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Edit Profile"
-        android:layout_marginTop="16dp" />
+        android:text="Make a Donation"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/userGreeting"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:padding="12dp"/>
 
+    <!-- View Donation History Button -->
     <Button
-        android:id="@+id/logoutButton"
+        android:id="@+id/viewHistoryButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="View Donation History"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/makeDonationButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:padding="12dp"/>
+
+    <!-- Leaderboard Button -->
+    <Button
+        android:id="@+id/leaderboardButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Leaderboard"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/viewHistoryButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:padding="12dp"/>
+
+    <!-- Gamification Section -->
+    <TextView
+        android:id="@+id/gamificationTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"
-        android:layout_gravity="center" />
+        android:text="Your Progress"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/leaderboardButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp"/>
 
+    <!-- Quick Access Panel (Recent Activity or Streaks) -->
+    <TextView
+        android:id="@+id/quickAccessPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recent activity goes here"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/gamificationTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

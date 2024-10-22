@@ -31,6 +31,9 @@
         <activity android:name=".RecipientProfileActivity" /> <!-- Ensure this line is present -->
         <activity android:name=".MainActivity" /> <!-- Ensure this line is present -->
         <activity android:name=".UserProfileActivity" /> <!-- Ensure this line is present -->
+        <activity android:name=".DonationActivity" /> <!-- Ensure this line is present -->
+        <activity android:name=".DonationHistoryActivity" /> <!-- Ensure this line is present -->
+        <activity android:name=".LeaderboardActivity" /> <!-- Ensure this line is present -->
 
     </application>
 

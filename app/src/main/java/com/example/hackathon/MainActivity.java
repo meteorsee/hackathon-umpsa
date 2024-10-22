@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         viewHistoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+                Intent intent = new Intent(MainActivity.this, DonationHistoryActivity.class);
                 startActivity(intent);
             }
         });

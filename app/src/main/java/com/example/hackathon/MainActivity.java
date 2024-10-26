@@ -88,16 +88,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Update UI based on user role
+// Update the UI based on the user role
     private void updateUIBasedOnRole() {
-        if (userRole.equals("Donor")) {
+        if ("Donor".equalsIgnoreCase(userRole)) {
             optionButton1.setText("Make a Donation");
             optionButton2.setText("View Donation History");
             optionButton3.setText("Leaderboard");
-        } else if (userRole.equals("Recipient")) {
+
+            optionButton1.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonationActivity.class)));
+            optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonationHistoryActivity.class)));
+            optionButton3.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LeaderboardActivity.class)));
+        } else if ("Recipient".equalsIgnoreCase(userRole)) {
             optionButton1.setText("Incoming Goods");
-            optionButton2.setVisibility(View.GONE);
-            optionButton3.setVisibility(View.GONE);
-        } else {
+            optionButton2.setText("Request Items");
+            optionButton3.setText("Support Contacts");
+
+            optionButton1.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, IncomingGoodsActivity.class)));
+            optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, RequestItemsActivity.class)));
+            optionButton3.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SupportContactsActivity.class)));
+        }
+ else {
             // Default options for guest
             optionButton1.setText("Explore Donations");
             optionButton2.setVisibility(View.GONE);

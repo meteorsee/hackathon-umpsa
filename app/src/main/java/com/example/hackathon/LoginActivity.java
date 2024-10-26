@@ -63,12 +63,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Directly navigate to MainActivity for guest access
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("guest_mode", true); // Pass flag indicating guest mode
                 startActivity(intent);
                 finish(); // Close LoginActivity
             }
         });
     }
-
 
     // Trigger the Google Sign-In flow
     private void signInWithGoogle() {
@@ -159,5 +159,4 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-
 }

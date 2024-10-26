@@ -2,6 +2,7 @@ package com.example.hackathon;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +41,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Get the logged-in user
         FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
+        Intent intent = getIntent();
+        boolean isGuestMode = intent.getBooleanExtra("guest_mode", false); // Check if guest mode is enabled
+
+        if (isGuestMode) {
+            // Set default role and greeting for guest
+            userRole = "Guest"; // Default role for guest
+            userGreeting.setText("Welcome, Guest!");
+            updateUIBasedOnRole(); // Update UI for guest
+        } else if (user != null) {
             String userId = user.getUid();
             fetchUserRole(userId);
         } else {
@@ -65,36 +74,34 @@ public class MainActivity extends AppCompatActivity {
 
                     // Update UI based on user role
                     updateUIBasedOnRole();
-                } else {
-                    Toast.makeText(MainActivity.this, "User data not found.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "User role not found.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "Failed to load user data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // Update the UI based on the user role
+    // Update UI based on user role
     private void updateUIBasedOnRole() {
-        if ("Donor".equalsIgnoreCase(userRole)) {
+        if (userRole.equals("Donor")) {
             optionButton1.setText("Make a Donation");
             optionButton2.setText("View Donation History");
             optionButton3.setText("Leaderboard");
-
-            optionButton1.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonationActivity.class)));
-            optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonationHistoryActivity.class)));
-            optionButton3.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LeaderboardActivity.class)));
-        } else if ("Recipient".equalsIgnoreCase(userRole)) {
+        } else if (userRole.equals("Recipient")) {
             optionButton1.setText("Incoming Goods");
-            optionButton2.setText("Request Items");
-            optionButton3.setText("Support Contacts");
-
-            optionButton1.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, IncomingGoodsActivity.class)));
-            optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, RequestItemsActivity.class)));
-            optionButton3.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SupportContactsActivity.class)));
+            optionButton2.setVisibility(View.GONE);
+            optionButton3.setVisibility(View.GONE);
+        } else {
+            // Default options for guest
+            optionButton1.setText("Explore Donations");
+            optionButton2.setVisibility(View.GONE);
+            optionButton3.setVisibility(View.GONE);
         }
     }
 }

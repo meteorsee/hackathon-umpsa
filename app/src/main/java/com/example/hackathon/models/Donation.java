@@ -1,5 +1,7 @@
 package com.example.hackathon.models;
 
+import java.util.List;
+
 public class Donation {
     private String userId;
     private String foodBank;
@@ -12,7 +14,7 @@ public class Donation {
     public Donation() {
     }
 
-    public Donation(String userId, String foodBank, String donationType, String donationDetails, String address, long timestamp) {
+    public Donation(String userId, String foodBank, String donationType, String donationDetails, String address, long timestamp, List<Item> selectedItems) {
         this.userId = userId;
         this.foodBank = foodBank;
         this.donationType = donationType;

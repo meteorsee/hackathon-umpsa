@@ -41,19 +41,30 @@ public class LoginActivity extends AppCompatActivity {
 
         // Configure Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)) // Replace with your Web client ID from Firebase
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
-                .requestProfile() // Request profile information
+                .requestProfile()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
 
-        // Set the onClickListener for the Google Sign-In button
+        // Google Sign-In button
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signInWithGoogle();
+            }
+        });
+
+        // Skip button for guest mode
+        findViewById(R.id.skip_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Directly navigate to MainActivity for guest access
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish(); // Close LoginActivity
             }
         });
     }

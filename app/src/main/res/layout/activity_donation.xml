@@ -1,92 +1,31 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DonationActivity">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <!-- App Bar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:title="Make a Donation"
-        app:titleTextColor="@android:color/white" />
-
-    <!-- Select Food Bank Dropdown -->
-    <Spinner
-        android:id="@+id/foodBankSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:entries="@array/food_banks"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="12dp"/>
-
-    <!-- Donation Type (Food Donation or Pre-Purchase) -->
     <RadioGroup
         android:id="@+id/donationTypeGroup"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/foodBankSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <RadioButton
-            android:id="@+id/foodDonationButton"
+            android:id="@+id/foodDonationOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Food Donation"
-            android:checked="true" />
+            android:text="Food Donation" />
 
         <RadioButton
-            android:id="@+id/prePurchaseButton"
+            android:id="@+id/prePurchaseOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pre-Purchase Goods" />
     </RadioGroup>
 
-    <!-- Address Input (only for pre-purchase) -->
-    <EditText
-        android:id="@+id/addressInput"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter Address"
-        android:inputType="textPostalAddress"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/donationTypeGroup"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="12dp" />
-
-    <!-- Donation Details Input -->
-    <EditText
-        android:id="@+id/donationDetailsInput"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter Donation Details (Amount, Type)"
-        app:layout_constraintTop_toBottomOf="@id/addressInput"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="12dp"/>
-
-    <!-- Submit Button -->
     <Button
-        android:id="@+id/submitDonationButton"
-        android:layout_width="0dp"
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit Donation"
-        app:layout_constraintTop_toBottomOf="@id/donationDetailsInput"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:padding="12dp"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="Next" />
+</LinearLayout>

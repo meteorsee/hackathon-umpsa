@@ -38,20 +38,18 @@ public class MainActivity extends AppCompatActivity {
         optionButton1 = findViewById(R.id.optionButton1);
         optionButton2 = findViewById(R.id.optionButton2);
         optionButton3 = findViewById(R.id.optionButton3);
+        Button profileOptionsButton = findViewById(R.id.profileOptionsButton);
 
-        // Get the logged-in user
+        // Fetch user ID after Firebase Auth initialization
         FirebaseUser user = mAuth.getCurrentUser();
-        Intent intent = getIntent();
-        boolean isGuestMode = intent.getBooleanExtra("guest_mode", false); // Check if guest mode is enabled
-
-        if (isGuestMode) {
-            // Set default role and greeting for guest
-            userRole = "Guest"; // Default role for guest
-            userGreeting.setText("Welcome, Guest!");
-            updateUIBasedOnRole(); // Update UI for guest
-        } else if (user != null) {
-            String userId = user.getUid();
-            fetchUserRole(userId);
+        if (user != null) {
+            String userId = user.getUid(); // Get the user ID here
+            profileOptionsButton.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, ProfileOptionsActivity.class);
+                intent.putExtra("userId", userId); // Pass the user ID
+                startActivity(intent);
+            });
+            fetchUserRole(userId); // Fetch user role here
         } else {
             Toast.makeText(this, "No user logged in.", Toast.LENGTH_SHORT).show();
             finish();
@@ -90,13 +88,18 @@ public class MainActivity extends AppCompatActivity {
     // Update UI based on user role
 // Update the UI based on the user role
     private void updateUIBasedOnRole() {
+        String userId = mAuth.getCurrentUser().getUid(); // Get the user ID here
+
         if ("Donor".equalsIgnoreCase(userRole)) {
             optionButton1.setText("Make a Donation");
             optionButton2.setText("View Donation History");
             optionButton3.setText("Leaderboard");
 
-            optionButton1.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonationActivity.class)));
-            optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonationHistoryActivity.class)));
+            optionButton1.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, DonationActivity.class);
+                intent.putExtra("userId", userId); // Pass the user ID
+                startActivity(intent);
+            });            optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonationHistoryActivity.class)));
             optionButton3.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LeaderboardActivity.class)));
         } else if ("Recipient".equalsIgnoreCase(userRole)) {
             optionButton1.setText("Incoming Goods");

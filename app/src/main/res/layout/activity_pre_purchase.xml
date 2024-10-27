@@ -4,6 +4,13 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <Spinner
+        android:id="@+id/foodBankSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/recipient_categories"
+        android:prompt="@string/select_food_bank"/>
+
     <EditText
         android:id="@+id/quantityInput"
         android:layout_width="match_parent"

@@ -7,19 +7,17 @@ public class Donation {
     private String foodBank;
     private String donationType;
     private String donationDetails;
-    private String address; // Only for pre-purchase
     private long timestamp;
 
     // Default constructor required for calls to DataSnapshot.getValue(Donation.class)
     public Donation() {
     }
 
-    public Donation(String userId, String foodBank, String donationType, String donationDetails, String address, long timestamp, List<Item> selectedItems) {
+    public Donation(String userId, String foodBank, String donationType, String donationDetails, long timestamp, List<Item> selectedItems) {
         this.userId = userId;
         this.foodBank = foodBank;
         this.donationType = donationType;
         this.donationDetails = donationDetails;
-        this.address = address;
         this.timestamp = timestamp;
     }
 
@@ -56,13 +54,6 @@ public class Donation {
         this.donationDetails = donationDetails;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public long getTimestamp() {
         return timestamp;

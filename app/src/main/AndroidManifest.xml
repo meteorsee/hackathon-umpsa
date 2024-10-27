@@ -39,6 +39,9 @@
         <activity android:name=".SupportContactsActivity" /> <!-- Ensure this line is present -->
         <activity android:name=".FoodDonationActivity" />
         <activity android:name=".PrePurchaseActivity" />
+        <activity android:name=".ProfileOptionsActivity" />
+        <activity android:name=".EditProfileActivity" />
+
     </application>
 
 </manifest>

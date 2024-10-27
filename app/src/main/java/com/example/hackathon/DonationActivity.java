@@ -19,6 +19,9 @@ public class DonationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donation);
 
+        // Retrieve userId passed from MainActivity
+        String userId = getIntent().getStringExtra("userId");
+
         donationTypeGroup = findViewById(R.id.donationTypeGroup);
         nextButton = findViewById(R.id.nextButton);
 
@@ -30,7 +33,9 @@ public class DonationActivity extends AppCompatActivity {
             } else {
                 intent = new Intent(DonationActivity.this, PrePurchaseActivity.class);
             }
+            intent.putExtra("userId", userId); // Pass userId to the next activity
             startActivity(intent);
         });
     }
+
 }

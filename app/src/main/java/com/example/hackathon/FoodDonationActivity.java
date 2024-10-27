@@ -1,5 +1,6 @@
 package com.example.hackathon;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -29,12 +30,25 @@ public class FoodDonationActivity extends AppCompatActivity {
     private DatabaseReference donationsRef;
     private DatabaseReference usersRef;
 
+    private String userId;
+
+    private static final String PREFS_NAME = "MyPrefs";
+    private static final String USER_ID_KEY = "userId";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String userId = getIntent().getStringExtra("userId");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_donation);
+
+        // Retrieve userId from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        userId = sharedPreferences.getString(USER_ID_KEY, null);
+
+        if (userId == null) {
+            Toast.makeText(this, "No user logged in. Please log in first.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         foodBankSpinner = findViewById(R.id.foodBankSpinner);
         foodItemsLayout = findViewById(R.id.foodItemsLayout);
@@ -52,10 +66,10 @@ public class FoodDonationActivity extends AppCompatActivity {
             itemCheckBoxes.add(checkBox);
         }
 
-        submitButton.setOnClickListener(v -> submitDonation(userId));
+        submitButton.setOnClickListener(v -> submitDonation());
     }
 
-    private void submitDonation(String userId) {
+    private void submitDonation() {
         String selectedFoodBank = foodBankSpinner.getSelectedItem().toString();
 
         List<Item> selectedItems = new ArrayList<>();
@@ -75,7 +89,7 @@ public class FoodDonationActivity extends AppCompatActivity {
 
         donationsRef.push().setValue(donation).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                addDonationAndPoints(userId, 100);  // Adjust points as needed
+                addDonationAndPoints(100);  // Adjust points as needed
                 Toast.makeText(FoodDonationActivity.this, "Donation recorded successfully.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(FoodDonationActivity.this, "Failed to record donation. Please try again.", Toast.LENGTH_SHORT).show();
@@ -83,7 +97,7 @@ public class FoodDonationActivity extends AppCompatActivity {
         });
     }
 
-    private void addDonationAndPoints(String userId, int pointsToAdd) {
+    private void addDonationAndPoints(int pointsToAdd) {
         DatabaseReference userRef = usersRef.child(userId);
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -98,7 +112,7 @@ public class FoodDonationActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle database errors here
+                Toast.makeText(FoodDonationActivity.this, "Error updating points: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

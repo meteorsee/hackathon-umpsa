@@ -1,6 +1,7 @@
 package com.example.hackathon;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "GoogleSignIn";
+    private static final String PREFS_NAME = "MyPrefs";
+    private static final String USER_ID_KEY = "userId";
 
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
@@ -37,6 +40,18 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Check if user is already logged in
+        String userId = getUserIdFromPreferences();
+        Log.d(TAG, "Retrieved userId from preferences: " + userId); // Log retrieved userId
+        if (userId != null) {
+            // User is already signed in, navigate to MainActivity
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_login);
 
         // Configure Google Sign-In
@@ -68,6 +83,27 @@ public class LoginActivity extends AppCompatActivity {
                 finish(); // Close LoginActivity
             }
         });
+    }
+
+    // Save user ID in SharedPreferences
+    private void saveUserIdToPreferences(String userId) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_ID_KEY, userId);
+        editor.apply();
+
+        // Log saved user ID for debugging
+        Log.d(TAG, "Saved userId to preferences: " + userId);
+    }
+
+    // Retrieve user ID from SharedPreferences
+    private String getUserIdFromPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String userId = sharedPreferences.getString(USER_ID_KEY, null);
+
+        // Log the retrieval of user ID
+        Log.d(TAG, "Retrieved userId from SharedPreferences: " + userId);
+        return userId;
     }
 
     // Trigger the Google Sign-In flow
@@ -114,6 +150,9 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null) {
                                 String userId = user.getUid(); // Get the UID
+
+                                // Save user ID in SharedPreferences
+                                saveUserIdToPreferences(userId);
 
                                 // Log the UID for debugging purposes
                                 Log.d(TAG, "User UID: " + userId);

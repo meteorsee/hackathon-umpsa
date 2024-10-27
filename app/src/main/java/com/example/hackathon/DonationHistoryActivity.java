@@ -1,5 +1,6 @@
 package com.example.hackathon;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hackathon.adapters.DonationAdapter;
 import com.example.hackathon.models.Donation;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,19 +29,23 @@ public class DonationHistoryActivity extends AppCompatActivity {
     private DonationAdapter donationAdapter;
     private ArrayList<Donation> donationList = new ArrayList<>();
 
-    private FirebaseAuth mAuth;
     private DatabaseReference donationsRef;
+
+    private String userId;
+
+    private static final String PREFS_NAME = "MyPrefs";
+    private static final String USER_ID_KEY = "userId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donation_history);
 
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        // Retrieve userId from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        userId = sharedPreferences.getString(USER_ID_KEY, null);
 
-        if (currentUser == null) {
+        if (userId == null) {
             // If user is not logged in, close the activity
             Toast.makeText(this, "Please log in to view donation history", Toast.LENGTH_SHORT).show();
             finish();
@@ -59,10 +62,10 @@ public class DonationHistoryActivity extends AppCompatActivity {
         recyclerViewDonations.setAdapter(donationAdapter);
 
         // Fetch Donation History from Firebase
-        fetchDonationHistory(currentUser.getUid());
+        fetchDonationHistory();
     }
 
-    private void fetchDonationHistory(String userId) {
+    private void fetchDonationHistory() {
         donationsRef.orderByChild("userId").equalTo(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

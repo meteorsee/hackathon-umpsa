@@ -1,11 +1,11 @@
 package com.example.hackathon;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class DonationActivity extends AppCompatActivity {
@@ -19,8 +19,9 @@ public class DonationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donation);
 
-        // Retrieve userId passed from MainActivity
-        String userId = getIntent().getStringExtra("userId");
+        // Retrieve userId from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String userId = sharedPreferences.getString("userId", ""); // Default to empty string if not found
 
         donationTypeGroup = findViewById(R.id.donationTypeGroup);
         nextButton = findViewById(R.id.nextButton);
@@ -37,5 +38,4 @@ public class DonationActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-
 }

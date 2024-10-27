@@ -1,6 +1,7 @@
 package com.example.hackathon;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,12 +20,14 @@ public class ChooseRoleActivity extends AppCompatActivity {
         donorButton = findViewById(R.id.donorButton);
         recipientButton = findViewById(R.id.recipientButton);
 
-        // Get user details passed from the login activity
-        firstName = getIntent().getStringExtra("firstName");
-        lastName = getIntent().getStringExtra("lastName");
-        email = getIntent().getStringExtra("email");
-        uid = getIntent().getStringExtra("uid");
+        // Retrieve user details from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        firstName = sharedPreferences.getString("firstName", ""); // Default to empty string if not found
+        lastName = sharedPreferences.getString("lastName", "");
+        email = sharedPreferences.getString("email", "");
+        uid = sharedPreferences.getString("userId", "");
 
+        // Set up donor button click listener
         donorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,6 +41,7 @@ public class ChooseRoleActivity extends AppCompatActivity {
             }
         });
 
+        // Set up recipient button click listener
         recipientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

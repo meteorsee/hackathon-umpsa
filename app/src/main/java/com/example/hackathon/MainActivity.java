@@ -1,7 +1,9 @@
 package com.example.hackathon;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log; // Import Log
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,8 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,16 +22,17 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView userGreeting;
     private Button optionButton1, optionButton2, optionButton3;
-    private FirebaseAuth mAuth;
     private String userRole;
+    private String userId;
+
+    private static final String PREFS_NAME = "MyPrefs";
+    private static final String USER_ID_KEY = "userId";
+    private static final String TAG = "MainActivity"; // Add a TAG for logging
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
 
         // Initialize views
         userGreeting = findViewById(R.id.userGreeting);
@@ -40,23 +41,29 @@ public class MainActivity extends AppCompatActivity {
         optionButton3 = findViewById(R.id.optionButton3);
         Button profileOptionsButton = findViewById(R.id.profileOptionsButton);
 
-        // Fetch user ID after Firebase Auth initialization
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            String userId = user.getUid(); // Get the user ID here
+        // Retrieve the user ID from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        userId = sharedPreferences.getString(USER_ID_KEY, null);
+
+        // Log or Toast whether the user ID is found
+        if (userId != null) {
+            Log.d(TAG, "User ID found in SharedPreferences: " + userId); // Log user ID
+            //Toast.makeText(this, "User ID found: " + userId, Toast.LENGTH_SHORT).show(); // Toast message
+            // If user ID is found, set up the profile options button and fetch user role
             profileOptionsButton.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, ProfileOptionsActivity.class);
                 intent.putExtra("userId", userId); // Pass the user ID
                 startActivity(intent);
             });
-            fetchUserRole(userId); // Fetch user role here
+            fetchUserRole(userId); // Fetch user role
         } else {
-            Toast.makeText(this, "No user logged in.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "No user ID found in SharedPreferences."); // Log no user ID found
+            Toast.makeText(this, "No user logged in. Please log in first.", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
-    // Fetch user role from Firebase
+    // Fetch user role from Firebase Database
     private void fetchUserRole(String userId) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -72,8 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Update UI based on user role
                     updateUIBasedOnRole();
-                }
-                else {
+                } else {
                     Toast.makeText(MainActivity.this, "User role not found.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -86,10 +92,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Update UI based on user role
-// Update the UI based on the user role
     private void updateUIBasedOnRole() {
-        String userId = mAuth.getCurrentUser().getUid(); // Get the user ID here
-
         if ("Donor".equalsIgnoreCase(userRole)) {
             optionButton1.setText("Make a Donation");
             optionButton2.setText("View Donation History");
@@ -99,7 +102,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, DonationActivity.class);
                 intent.putExtra("userId", userId); // Pass the user ID
                 startActivity(intent);
-            });            optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonationHistoryActivity.class)));
+            });
+            optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonationHistoryActivity.class)));
             optionButton3.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LeaderboardActivity.class)));
         } else if ("Recipient".equalsIgnoreCase(userRole)) {
             optionButton1.setText("Incoming Goods");
@@ -109,8 +113,7 @@ public class MainActivity extends AppCompatActivity {
             optionButton1.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, IncomingGoodsActivity.class)));
             optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, RequestItemsActivity.class)));
             optionButton3.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SupportContactsActivity.class)));
-        }
- else {
+        } else {
             // Default options for guest
             optionButton1.setText("Explore Donations");
             optionButton2.setVisibility(View.GONE);

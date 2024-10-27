@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Donor Profile"
+            android:text="Recipient Profile"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_gravity="center"
@@ -44,7 +44,7 @@
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:layout_marginBottom="16dp"
-            android:enabled="false" />
+            android:enabled="false" /> <!-- Disabled for editing -->
 
         <EditText
             android:id="@+id/addressEditText"
@@ -62,14 +62,35 @@
             android:inputType="phone"
             android:layout_marginBottom="16dp" />
 
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"/>
+
+
+        <EditText
+            android:id="@+id/bankAccountEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Bank Account"
+            android:inputType="text"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/bankNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Bank Name"
+            android:inputType="text"
+            android:layout_marginBottom="16dp" />
+
         <Button
             android:id="@+id/saveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save"
-            android:textSize="18sp"
             android:backgroundTint="@color/black"
-            android:textColor="@color/white" />
-
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </ScrollView>

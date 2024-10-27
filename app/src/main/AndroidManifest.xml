@@ -18,7 +18,7 @@
 
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoadingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".LoginActivity" /> <!-- Ensure this line is present -->
         <activity android:name=".ChooseRoleActivity" /> <!-- Ensure this line is present -->
         <activity android:name=".DonorProfileActivity" /> <!-- Ensure this line is present -->
         <activity android:name=".RecipientProfileActivity" /> <!-- Ensure this line is present -->

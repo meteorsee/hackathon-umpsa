@@ -3,7 +3,6 @@ package com.example.hackathon; // MapsActivity.java
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,13 +43,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Set up Search input
         EditText searchInput = findViewById(R.id.searchEditText); // Updated ID
-        Button searchButton = findViewById(R.id.searchButton); // Add a reference to the search button
-
-        // Add a listener to the search button
-        searchButton.setOnClickListener(v -> {
-            String query = searchInput.getText().toString();
-            performSearch(query);
-        });
 
         // Initialize views
         mapView = findViewById(R.id.mapView);

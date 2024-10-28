@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/lightbackground">
 
     <ImageView
         android:id="@+id/foodImage"
@@ -16,12 +17,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:textColor="#FFFFFF"
         android:paddingTop="8dp"/>
 
     <TextView
         android:id="@+id/foodDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
         android:textSize="14sp"/>
 
     <TextView
@@ -29,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
+        android:textColor="#FFFFFF"
         android:paddingBottom="8dp"/>
 
     <!-- Quantity TextView added here -->
@@ -37,6 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:paddingBottom="8dp"/>
 

@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/lightbackground">
 
     <!-- Restaurant Details -->
     <TextView
@@ -15,6 +16,7 @@
         android:textStyle="bold"
         android:gravity="center"
         android:padding="12dp"
+        android:textColor="#FFFFFF"
         android:layout_marginBottom="24dp" />
 
     <!-- Total Amount -->
@@ -24,6 +26,7 @@
         android:layout_height="wrap_content"
         android:text="Total Amount: $0.00"
         android:textSize="20sp"
+        android:textColor="#FFFFFF"
         android:layout_marginBottom="16dp" />
 
     <!-- Payment Options Title -->
@@ -32,6 +35,7 @@
         android:layout_height="wrap_content"
         android:text="Select Payment Option:"
         android:textSize="18sp"
+        android:textColor="#FFFFFF"
         android:layout_marginBottom="8dp" />
 
     <!-- Payment Options Radio Group -->
@@ -46,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Credit Card"
+            android:textColor="#FFFFFF"
             android:padding="8dp" />
 
         <RadioButton
@@ -53,6 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PayPal"
+            android:textColor="#FFFFFF"
             android:padding="8dp" />
 
         <RadioButton
@@ -60,6 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cash on Delivery"
+            android:textColor="#FFFFFF"
             android:padding="8dp" />
     </RadioGroup>
 

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Restaurant Details -->
+    <TextView
+        android:id="@+id/restaurant_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Restaurant Name"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Total Amount -->
+    <TextView
+        android:id="@+id/total_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Amount: $0.00"
+        android:textSize="20sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Payment Options Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Payment Option:"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Payment Options Radio Group -->
+    <RadioGroup
+        android:id="@+id/payment_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/payment_credit_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Credit Card"
+            android:padding="8dp" />
+
+        <RadioButton
+            android:id="@+id/payment_paypal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PayPal"
+            android:padding="8dp" />
+
+        <RadioButton
+            android:id="@+id/payment_cash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash on Delivery"
+            android:padding="8dp" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/success_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"> <!-- Initially hidden -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Payment Successful!"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/countdown_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <!-- Pay Now Button -->
+    <Button
+        android:id="@+id/button_pay_now"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pay Now"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/black"
+    android:textColor="@android:color/white" />
+</LinearLayout>

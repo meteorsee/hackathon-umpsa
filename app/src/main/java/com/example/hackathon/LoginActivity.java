@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -76,39 +74,34 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.skip_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Directly navigate to MainActivity for guest access
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("guest_mode", true); // Pass flag indicating guest mode
+                intent.putExtra("guest_mode", true);
                 startActivity(intent);
-                finish(); // Close LoginActivity
+                finish();
             }
         });
     }
 
-    // Save user ID in SharedPreferences
-    private void saveUserIdToPreferences(String userId) {
+    // Save user details in SharedPreferences
+    private void saveUserDetailsToPreferences(String userId, String firstName, String lastName, String email) {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(USER_ID_KEY, userId);
+        editor.putString("firstName", firstName);
+        editor.putString("lastName", lastName);
+        editor.putString("email", email);
         editor.apply();
 
-        // Log saved user ID for debugging
-        Log.d(TAG, "Saved userId to preferences: " + userId);
+        Log.d(TAG, "Saved user details to preferences: " + firstName + " " + lastName + ", " + email);
     }
 
     // Retrieve user ID from SharedPreferences
     private String getUserIdFromPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String userId = sharedPreferences.getString(USER_ID_KEY, null);
-
-        // Log the retrieval of user ID
-        Log.d(TAG, "Retrieved userId from SharedPreferences: " + userId);
-        return userId;
+        return sharedPreferences.getString(USER_ID_KEY, null);
     }
 
-    // Trigger the Google Sign-In flow
     private void signInWithGoogle() {
-        // Sign out the last user first to force the account selection dialog
         mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -118,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    // Handle result of the Google Sign-In intent
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -126,19 +118,16 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
                 Toast.makeText(LoginActivity.this, "Google sign-in failed.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    // Authenticate with Firebase using the Google account
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
@@ -146,52 +135,40 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign-in success, get the signed-in user's info
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null) {
-                                String userId = user.getUid(); // Get the UID
+                                String userId = user.getUid();
+                                String displayName = user.getDisplayName();
+                                String firstName = displayName != null && displayName.contains(" ") ? displayName.split(" ")[0] : "";
+                                String lastName = displayName != null && displayName.contains(" ") ? displayName.split(" ")[1] : "";
+                                String email = user.getEmail();
 
-                                // Save user ID in SharedPreferences
-                                saveUserIdToPreferences(userId);
+                                saveUserDetailsToPreferences(userId, firstName, lastName, email);
 
-                                // Log the UID for debugging purposes
-                                Log.d(TAG, "User UID: " + userId);
-
-                                // Check if user exists in Firebase Database using UID
                                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
                                 databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         if (snapshot.exists()) {
-                                            // User exists, navigate to MainActivity and fetch user details
-                                            Log.d(TAG, "User exists in database: " + userId); // Log if user exists
+                                            Log.d(TAG, "User exists in database: " + userId);
                                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                             startActivity(intent);
                                         } else {
-                                            // User doesn't exist, navigate to UserProfileActivity
-                                            Log.d(TAG, "User does not exist, redirecting to profile setup."); // Log if user doesn't exist
-                                            String firstName = user.getDisplayName() != null ? user.getDisplayName().split(" ")[0] : "";
-                                            String lastName = user.getDisplayName() != null ? user.getDisplayName().split(" ")[1] : "";
+                                            Log.d(TAG, "User does not exist, redirecting to profile setup.");
                                             Intent intent = new Intent(LoginActivity.this, ChooseRoleActivity.class);
-                                            intent.putExtra("firstName", firstName);
-                                            intent.putExtra("lastName", lastName);
-                                            intent.putExtra("email", user.getEmail());
-                                            intent.putExtra("uid", userId); // Pass UID to the next activity
                                             startActivity(intent);
                                         }
-                                        finish(); // Close the login activity
+                                        finish();
                                     }
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError error) {
-                                        // Handle possible errors.
                                         Log.e(TAG, "Database error: " + error.getMessage());
                                         Toast.makeText(LoginActivity.this, "Error checking user data", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
                         } else {
-                            // If sign-in fails, display a message to the user
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
                         }

@@ -16,32 +16,37 @@
         android:theme="@style/Theme.Hackathon"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD1tzR-bKPd1XRbAuirquTB5uHKoPiMFBQ" />
 
         <activity
             android:name=".LoadingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".ChooseRoleActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".DonorProfileActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".RecipientProfileActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".MainActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".UserProfileActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".DonationActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".DonationHistoryActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".LeaderboardActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".IncomingGoodsActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".RequestItemsActivity" /> <!-- Ensure this line is present -->
-        <activity android:name=".SupportContactsActivity" /> <!-- Ensure this line is present -->
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ChooseRoleActivity" />
+        <activity android:name=".DonorProfileActivity" />
+        <activity android:name=".SellerProfileActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".UserProfileActivity" />
+        <activity android:name=".DonationActivity" />
+        <activity android:name=".DonationHistoryActivity" />
+        <activity android:name=".LeaderboardActivity" />
+        <activity android:name=".IncomingGoodsActivity" />
+        <activity android:name=".RequestItemsActivity" />
+        <activity android:name=".SupportContactsActivity" />
         <activity android:name=".FoodDonationActivity" />
         <activity android:name=".PrePurchaseActivity" />
         <activity android:name=".ProfileOptionsActivity" />
+        <activity android:name=".MapsActivity" />
+        <activity android:name=".FoodMenuActivity" />
+        <activity android:name=".CheckoutActivity" />
+
 
     </application>
-
 </manifest>

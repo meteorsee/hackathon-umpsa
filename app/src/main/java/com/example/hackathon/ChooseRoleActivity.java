@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ChooseRoleActivity extends AppCompatActivity {
 
-    private Button donorButton, recipientButton;
+    private Button donorButton, sellerButton;
     private String firstName, lastName, email, uid;
 
     @Override
@@ -18,11 +18,11 @@ public class ChooseRoleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_role);
 
         donorButton = findViewById(R.id.donorButton);
-        recipientButton = findViewById(R.id.recipientButton);
+        sellerButton = findViewById(R.id.sellerButton);
 
         // Retrieve user details from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        firstName = sharedPreferences.getString("firstName", ""); // Default to empty string if not found
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        firstName = sharedPreferences.getString("firstName", "");
         lastName = sharedPreferences.getString("lastName", "");
         email = sharedPreferences.getString("email", "");
         uid = sharedPreferences.getString("userId", "");
@@ -41,16 +41,16 @@ public class ChooseRoleActivity extends AppCompatActivity {
             }
         });
 
-        // Set up recipient button click listener
-        recipientButton.setOnClickListener(new View.OnClickListener() {
+        // Set up seller button click listener
+        sellerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent recipientIntent = new Intent(ChooseRoleActivity.this, RecipientProfileActivity.class);
-                recipientIntent.putExtra("firstName", firstName);
-                recipientIntent.putExtra("lastName", lastName);
-                recipientIntent.putExtra("email", email);
-                recipientIntent.putExtra("uid", uid);
-                startActivity(recipientIntent);
+                Intent sellerIntent = new Intent(ChooseRoleActivity.this, SellerProfileActivity.class);
+                sellerIntent.putExtra("firstName", firstName);
+                sellerIntent.putExtra("lastName", lastName);
+                sellerIntent.putExtra("email", email);
+                sellerIntent.putExtra("uid", uid);
+                startActivity(sellerIntent);
                 finish();
             }
         });

@@ -29,10 +29,10 @@
         android:textColor="@color/white" />
 
     <Button
-        android:id="@+id/recipientButton"
+        android:id="@+id/sellerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="I am a Recipient"
+        android:text="I am a Seller"
         android:textSize="18sp"
         android:backgroundTint="@color/black"
         android:textColor="@color/white" />

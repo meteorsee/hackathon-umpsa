@@ -3,7 +3,7 @@ package com.example.hackathon;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log; // Import Log
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "MyPrefs";
     private static final String USER_ID_KEY = "userId";
-    private static final String TAG = "MainActivity"; // Add a TAG for logging
+    private static final String USER_ROLE_KEY = "userRole"; // New key for user role
+    private static final String TAG = "MainActivity"; // Log tag
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,29 +42,36 @@ public class MainActivity extends AppCompatActivity {
         optionButton3 = findViewById(R.id.optionButton3);
         Button profileOptionsButton = findViewById(R.id.profileOptionsButton);
 
-        // Retrieve the user ID from SharedPreferences
+        // Retrieve the user ID and role from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         userId = sharedPreferences.getString(USER_ID_KEY, null);
+        userRole = sharedPreferences.getString(USER_ROLE_KEY, null);
 
-        // Log or Toast whether the user ID is found
         if (userId != null) {
-            Log.d(TAG, "User ID found in SharedPreferences: " + userId); // Log user ID
-            //Toast.makeText(this, "User ID found: " + userId, Toast.LENGTH_SHORT).show(); // Toast message
-            // If user ID is found, set up the profile options button and fetch user role
+            Log.d(TAG, "User ID found in SharedPreferences: " + userId);
+
+            if (userRole != null) {
+                Log.d(TAG, "User role found in SharedPreferences: " + userRole);
+                updateUIBasedOnRole(); // If role is available, directly update UI
+            } else {
+                Log.d(TAG, "User role not found in SharedPreferences. Fetching from Firebase...");
+                fetchUserRole(userId); // Fetch role from Firebase if not in SharedPreferences
+            }
+
+            // Set up profile options button
             profileOptionsButton.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, ProfileOptionsActivity.class);
-                intent.putExtra("userId", userId); // Pass the user ID
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             });
-            fetchUserRole(userId); // Fetch user role
         } else {
-            Log.d(TAG, "No user ID found in SharedPreferences."); // Log no user ID found
+            Log.d(TAG, "No user ID found in SharedPreferences.");
             Toast.makeText(this, "No user logged in. Please log in first.", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
-    // Fetch user role from Firebase Database
+    // Fetch user role from Firebase if not found in SharedPreferences
     private void fetchUserRole(String userId) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -74,10 +82,18 @@ public class MainActivity extends AppCompatActivity {
                     String firstName = snapshot.child("firstName").getValue(String.class);
                     String lastName = snapshot.child("lastName").getValue(String.class);
 
+                    Log.d(TAG, "User role fetched from Firebase: " + userRole);
+
                     // Display greeting
                     userGreeting.setText("Hello, " + firstName + " " + lastName + "!");
 
-                    // Update UI based on user role
+                    // Store user role in SharedPreferences for future sessions
+                    SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+                    editor.putString(USER_ROLE_KEY, userRole);
+                    editor.apply();
+                    Log.d(TAG, "User role stored in SharedPreferences: " + userRole);
+
+
                     updateUIBasedOnRole();
                 } else {
                     Toast.makeText(MainActivity.this, "User role not found.", Toast.LENGTH_SHORT).show();
@@ -99,22 +115,22 @@ public class MainActivity extends AppCompatActivity {
             optionButton3.setText("Leaderboard");
 
             optionButton1.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, DonationActivity.class);
-                intent.putExtra("userId", userId); // Pass the user ID
+                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             });
             optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DonationHistoryActivity.class)));
             optionButton3.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LeaderboardActivity.class)));
-        } else if ("Recipient".equalsIgnoreCase(userRole)) {
-            optionButton1.setText("Incoming Goods");
-            optionButton2.setText("Request Items");
-            optionButton3.setText("Support Contacts");
+        } else if ("Seller".equalsIgnoreCase(userRole)) {
+            // Uncomment or adjust this section based on the actual Seller options needed
+//            optionButton1.setText("Incoming Goods");
+//            optionButton2.setText("Request Items");
+//            optionButton3.setText("Support Contacts");
 
-            optionButton1.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, IncomingGoodsActivity.class)));
-            optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, RequestItemsActivity.class)));
-            optionButton3.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SupportContactsActivity.class)));
+//            optionButton1.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, IncomingGoodsActivity.class)));
+//            optionButton2.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, RequestItemsActivity.class)));
+//            optionButton3.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SupportContactsActivity.class)));
         } else {
-            // Default options for guest
             optionButton1.setText("Explore Donations");
             optionButton2.setVisibility(View.GONE);
             optionButton3.setVisibility(View.GONE);

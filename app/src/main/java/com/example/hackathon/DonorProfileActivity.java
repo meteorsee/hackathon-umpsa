@@ -1,5 +1,6 @@
 package com.example.hackathon;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class DonorProfileActivity extends AppCompatActivity {
     private String userId;
     private EditText firstNameEditText, lastNameEditText, emailEditText, addressEditText, phoneEditText;
     private Button saveButton;
+    private String role = "Donor"; // Set the role for donor
 
     private static final String PREFS_NAME = "MyPrefs";
     private static final String USER_ID_KEY = "userId";
@@ -30,8 +32,14 @@ public class DonorProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_donor_profile);
 
         // Retrieve userId from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         userId = sharedPreferences.getString(USER_ID_KEY, null);
+
+        // Retrieve userId from Intent extras
+        Intent intent = getIntent();
+        String firstName = intent.getStringExtra("firstName");
+        String lastName = intent.getStringExtra("lastName");
+        String email = intent.getStringExtra("email");
 
         if (userId == null) {
             Toast.makeText(this, "Please log in to view and edit profile", Toast.LENGTH_SHORT).show();
@@ -46,6 +54,11 @@ public class DonorProfileActivity extends AppCompatActivity {
         addressEditText = findViewById(R.id.addressEditText);
         phoneEditText = findViewById(R.id.phoneEditText);
         saveButton = findViewById(R.id.saveButton);
+
+        // Set fields with initial data from Intent extras
+        firstNameEditText.setText(firstName);
+        lastNameEditText.setText(lastName);
+        emailEditText.setText(email);
 
         // Load user profile data
         loadUserProfile();
@@ -97,7 +110,8 @@ public class DonorProfileActivity extends AppCompatActivity {
         databaseReference.child("lastName").setValue(updatedLastName);
         databaseReference.child("email").setValue(updatedEmail);
         databaseReference.child("address").setValue(updatedAddress);
-        databaseReference.child("phoneNumber").setValue(updatedPhoneNumber).addOnCompleteListener(task -> {
+        databaseReference.child("phoneNumber").setValue(updatedPhoneNumber);
+        databaseReference.child("role").setValue(role).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(DonorProfileActivity.this, "Profile updated successfully.", Toast.LENGTH_SHORT).show();
                 // Redirect back to MainActivity
